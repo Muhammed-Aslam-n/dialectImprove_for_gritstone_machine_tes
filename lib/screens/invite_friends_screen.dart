@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gritstone_machine_test/constants/app_relates.dart';
 import 'package:gritstone_machine_test/widgets/text_widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+
+import '../providers/tts_provider.dart';
 
 class InviteFriendsScreen extends StatelessWidget {
   const InviteFriendsScreen({Key? key}) : super(key: key);
@@ -21,7 +24,32 @@ class InviteFriendsScreen extends StatelessWidget {
           'Invite Friends',
           style: TextStyle(color: Theme.of(context).colorScheme.secondary),
         ),
-      ),
+      ),floatingActionButton: Consumer<TtsProvider>(
+        builder: (context,tts,_) {
+          if(tts.isSpeaking){
+            return FloatingActionButton(
+              onPressed: () {
+                final tts = Provider.of<TtsProvider>(context, listen: false);
+                tts.stopSpeaking();
+              },
+              child: const Icon(
+                Icons.stop,
+                color: Colors.white,
+              ),
+            );
+          }
+          return FloatingActionButton(
+            onPressed: () {
+              final tts = Provider.of<TtsProvider>(context, listen: false);
+              tts.speak(AppConst.appInvite);
+            },
+            child: const Icon(
+              Icons.play_arrow,
+              color: Colors.white,
+            ),
+          );
+        }
+    ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Column(
@@ -33,10 +61,10 @@ class InviteFriendsScreen extends StatelessWidget {
                   fontSize: 25,
                 )),
             const SizedBox(height: 60),
-            const Text('Discover the joy of Helping People! ',
+            const Text(AppConst.appInvite,
                 style: TextStyle(
-                  fontSize: 25,
-                )),
+                  fontSize: 21,color: Colors.black
+                ),),
             const SizedBox(height: 100),
             ElevatedButton(
               onPressed: () {
