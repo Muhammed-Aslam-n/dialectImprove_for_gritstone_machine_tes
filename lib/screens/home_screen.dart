@@ -114,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             onPlayClicked: () {
                               ttsProvider.speak(
                                 ttsProvider.noteList[index]?.note ??
-                                    'Note could not found',
+                                    'Note could not found',index:index
                               );
                             },
                             isPlaying: ttsProvider.isSpeaking,
@@ -408,10 +408,16 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                isPlaying?IconButton(
+                isPlaying?ttsProvider.playingIndex == index?IconButton(
                   onPressed: onStopClicked,
                   icon: const Icon(
                     CupertinoIcons.stop,
+                    color: Colors.blue,
+                  ),
+                ):IconButton(
+                  onPressed: onPlayClicked,
+                  icon: const Icon(
+                    CupertinoIcons.play_arrow_solid,
                     color: Colors.blue,
                   ),
                 ):IconButton(

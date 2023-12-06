@@ -22,33 +22,43 @@ class TtsProvider extends ChangeNotifier {
 
   bool isSpeaking = false;
 
+  // speakNote(NoteModel noteModel)async{
+  //   await _flutterTts.stop();
+  //
+  // }
+
   // A method to speak the given text
-  Future<void> speak(String text) async {
+  int playingIndex = 0;
+  Future<void> speak(String text, {index}) async {
     // Stop any previous speech
     await _flutterTts.stop();
     // Speak the text
 
     if (text.isEmpty) {
       await _flutterTts.speak(emptyTextAlert);
+      playingIndex = index??-1;
       isSpeaking = true;
       _flutterTts.setCompletionHandler(() {
-isSpeaking = false;
+        isSpeaking = false;
       });
     } else {
+      playingIndex = index??-1;
       await _flutterTts.setVolume(1.0);
       await _flutterTts.setSpeechRate(0.5);
       await _flutterTts.setPitch(1.0);
       await _flutterTts.speak(text);
       isSpeaking = true;
       _flutterTts.setCompletionHandler(() {
-isSpeaking = false;
+        isSpeaking = false;
+        debugPrint('completed');
+        notifyListeners();
       });
     }
     // Notify the listeners
     notifyListeners();
   }
 
-  stopSpeaking()async{
+  stopSpeaking() async {
     await _flutterTts.stop();
     isSpeaking = false;
     notifyListeners();
